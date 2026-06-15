@@ -23,11 +23,11 @@
     }
     .container {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       background: rgba(250, 245, 235, 0.96);
       border-radius: 36px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-      padding: 18px 14px 22px;
+      padding: 16px 12px 20px;
       border: 1px solid #c9aa64;
       margin: 0 auto;
     }
@@ -35,8 +35,8 @@
       text-align: center;
       background: #2d5a27;
       border-radius: 50px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
       box-shadow: inset 0 -4px 0 #1a3616;
       border: 1px solid #e4b95b;
       color: #fbe9b1;
@@ -44,63 +44,100 @@
       font-size: 1.3rem;
       letter-spacing: 3px;
     }
-    .remain-row {
+
+    /* 主布局：四列 */
+    .main-layout {
       display: flex;
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 8px;
     }
-    .remain-card {
+    /* 三列玩家 */
+    .player-column {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+    .player-column .remain-card {
       background: radial-gradient(circle at 25% 30%, #fff9ee, #e9d4ae);
-      border-radius: 22px;
-      padding: 14px 6px 10px;
+      border-radius: 16px;
+      padding: 8px 4px 6px;
       text-align: center;
       border: 2px solid #d3a84c;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.3);
-      cursor: pointer;
-      transition: 0.15s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
-    .remain-card.active {
-      border-color: #e63946;
-      box-shadow: 0 0 18px #e6394680;
-      background: radial-gradient(circle at 25% 30%, #fff2f0, #f5d5c8);
-    }
-    .remain-card .name {
+    .player-column .remain-card .name {
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 0.85rem;
       color: #3d2b10;
     }
-    .remain-card .num {
-      font-size: 3rem;
+    .player-column .remain-card .num {
+      font-size: 2.2rem;
       font-weight: 900;
       color: #1f401a;
       line-height: 1.1;
     }
-    .remain-card .label {
-      font-size: 0.7rem;
+    .player-column .remain-card .label {
+      font-size: 0.6rem;
       color: #6e5a3a;
+    }
+
+    /* 快捷按钮竖排 */
+    .quick-num-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .quick-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 7px 4px;
+      font-weight: bold;
+      font-size: 0.7rem;
+      cursor: pointer;
+      box-shadow: 0 2px 0 #5a4326;
+      color: #2d2a1a;
+      transition: 0.06s;
+      text-align: center;
+      width: 100%;
+    }
+    .quick-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #3b2a14;
+    }
+    .col-up .quick-btn { background: linear-gradient(180deg, #f0d89c, #b8863a); }
+    .col-up .remain-card { border-color: #c8983a; }
+    .col-opposite .quick-btn { background: linear-gradient(180deg, #f8c8a0, #c07040); }
+    .col-opposite .remain-card { border-color: #c08040; }
+    .col-down .quick-btn { background: linear-gradient(180deg, #c8d8a0, #7a8a40); }
+    .col-down .remain-card { border-color: #8a9a40; }
+
+    /* 牌面区（右侧） */
+    .card-panel {
+      flex: 1.6;
+      min-width: 0;
     }
     .section-title {
       font-weight: 800;
-      font-size: 0.95rem;
+      font-size: 0.8rem;
       color: #3b5a2b;
       border-bottom: 2px solid #c7a86b60;
-      padding-bottom: 6px;
-      margin: 12px 0 8px;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      text-align: center;
     }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin: 8px 0;
+      gap: 5px;
     }
     .card-cell {
       background: radial-gradient(circle at 25% 30%, #fffdf5, #ecd9b4);
-      border-radius: 16px;
-      padding: 8px 2px 6px;
+      border-radius: 12px;
+      padding: 4px 1px 3px;
       text-align: center;
       border: 1px solid #d3a84c;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
       cursor: pointer;
       transition: 0.06s;
     }
@@ -112,37 +149,38 @@
       pointer-events: none;
     }
     .card-rank {
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       font-weight: 900;
       color: #2c4720;
       line-height: 1;
     }
     .card-sym {
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       color: #8b6d3d;
-      margin: 2px 0;
+      margin: 1px 0;
     }
     .card-count {
       background: #2f4d2b;
       color: #f7e9b0;
-      border-radius: 14px;
-      padding: 3px 10px;
-      font-size: 0.75rem;
+      border-radius: 10px;
+      padding: 2px 6px;
+      font-size: 0.65rem;
       font-weight: 700;
       display: inline-block;
     }
+
     .footer-btns {
       display: flex;
       justify-content: center;
-      gap: 14px;
-      margin-top: 14px;
+      gap: 12px;
+      margin-top: 10px;
     }
     .btn {
       border: none;
       border-radius: 28px;
-      padding: 12px 22px;
+      padding: 10px 20px;
       font-weight: bold;
-      font-size: 1rem;
+      font-size: 0.9rem;
       cursor: pointer;
       box-shadow: 0 4px 0 #5a4326;
       background: linear-gradient(180deg, #f8e7c0, #caa461);
@@ -160,9 +198,9 @@
     }
     .note {
       text-align: center;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: #8b7a5a;
-      margin-top: 10px;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -170,33 +208,83 @@
 <div class="container">
   <div class="header">🃏 够级记牌器</div>
 
-  <div class="remain-row">
-    <div class="remain-card active" id="selUp">
-      <div class="name">⬆️ 上家</div>
-      <div class="num" id="remainUp">52</div>
-      <div class="label">剩余牌数</div>
+  <div class="main-layout">
+    <!-- 上家列 -->
+    <div class="player-column col-up">
+      <div class="remain-card">
+        <div class="name">⬆️ 上家</div>
+        <div class="num" id="remainUp">52</div>
+        <div class="label">剩余</div>
+      </div>
+      <div class="quick-num-col">
+        <button class="quick-btn" onclick="quickAdd('up',1)">1张</button>
+        <button class="quick-btn" onclick="quickAdd('up',2)">2张</button>
+        <button class="quick-btn" onclick="quickAdd('up',3)">3张</button>
+        <button class="quick-btn" onclick="quickAdd('up',4)">4张</button>
+        <button class="quick-btn" onclick="quickAdd('up',5)">5张</button>
+        <button class="quick-btn" onclick="quickAdd('up',6)">6张</button>
+        <button class="quick-btn" onclick="quickAdd('up',7)">7张</button>
+        <button class="quick-btn" onclick="quickAdd('up',8)">8张</button>
+        <button class="quick-btn" onclick="quickAdd('up',9)">9张</button>
+        <button class="quick-btn" onclick="quickAdd('up',10)">10张</button>
+      </div>
     </div>
-    <div class="remain-card" id="selOpposite">
-      <div class="name">↔️ 对家</div>
-      <div class="num" id="remainOpposite">52</div>
-      <div class="label">剩余牌数</div>
+
+    <!-- 对家列 -->
+    <div class="player-column col-opposite">
+      <div class="remain-card">
+        <div class="name">↔️ 对家</div>
+        <div class="num" id="remainOpposite">52</div>
+        <div class="label">剩余</div>
+      </div>
+      <div class="quick-num-col">
+        <button class="quick-btn" onclick="quickAdd('opposite',1)">1张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',2)">2张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',3)">3张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',4)">4张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',5)">5张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',6)">6张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',7)">7张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',8)">8张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',9)">9张</button>
+        <button class="quick-btn" onclick="quickAdd('opposite',10)">10张</button>
+      </div>
     </div>
-    <div class="remain-card" id="selDown">
-      <div class="name">⬇️ 下家</div>
-      <div class="num" id="remainDown">52</div>
-      <div class="label">剩余牌数</div>
+
+    <!-- 下家列 -->
+    <div class="player-column col-down">
+      <div class="remain-card">
+        <div class="name">⬇️ 下家</div>
+        <div class="num" id="remainDown">52</div>
+        <div class="label">剩余</div>
+      </div>
+      <div class="quick-num-col">
+        <button class="quick-btn" onclick="quickAdd('down',1)">1张</button>
+        <button class="quick-btn" onclick="quickAdd('down',2)">2张</button>
+        <button class="quick-btn" onclick="quickAdd('down',3)">3张</button>
+        <button class="quick-btn" onclick="quickAdd('down',4)">4张</button>
+        <button class="quick-btn" onclick="quickAdd('down',5)">5张</button>
+        <button class="quick-btn" onclick="quickAdd('down',6)">6张</button>
+        <button class="quick-btn" onclick="quickAdd('down',7)">7张</button>
+        <button class="quick-btn" onclick="quickAdd('down',8)">8张</button>
+        <button class="quick-btn" onclick="quickAdd('down',9)">9张</button>
+        <button class="quick-btn" onclick="quickAdd('down',10)">10张</button>
+      </div>
+    </div>
+
+    <!-- 牌面区 -->
+    <div class="card-panel">
+      <div class="section-title">🃏 已出牌面</div>
+      <div class="card-grid" id="cardGrid"></div>
     </div>
   </div>
-
-  <div class="section-title">🃏 点击牌面为选中玩家出牌 +1</div>
-  <div class="card-grid" id="cardGrid"></div>
 
   <div class="footer-btns">
     <button class="btn" id="undoBtn">↩️ 撤回</button>
     <button class="btn green" id="resetBtn">🔄 重置</button>
   </div>
   <div class="note">
-    📐 先点人(上家/对家/下家) → 再点牌面 | 每人52张 | Ctrl+Z撤回
+    📐 点牌面=三家共享计数 | 点数字=扣各家剩余张数 | 每人52张
   </div>
 </div>
 
@@ -222,61 +310,57 @@
   ];
 
   const MAX_PER_PLAYER = 52;
-  const PLAYERS = ['up', 'opposite', 'down'];
   const GLOBAL_MAX = {};
   CARD_DEFS.forEach(c => GLOBAL_MAX[c.id] = c.total);
 
-  let counts = { up:{}, opposite:{}, down:{} };
-  let selected = 'up';
+  let cardCounts = {};
+  let remainCounts = { up: 0, opposite: 0, down: 0 };
   let history = [];
 
   function init() {
-    PLAYERS.forEach(p => {
-      counts[p] = {};
-      CARD_DEFS.forEach(c => counts[p][c.id] = 0);
-    });
+    cardCounts = {};
+    CARD_DEFS.forEach(c => cardCounts[c.id] = 0);
+    remainCounts = { up: 0, opposite: 0, down: 0 };
     history = [];
-    selected = 'up';
-  }
-
-  function globalUsed(cardId) {
-    return PLAYERS.reduce((sum, p) => sum + (counts[p][cardId] || 0), 0);
   }
 
   function playerRemain(player) {
-    const used = Object.values(counts[player]).reduce((a,b)=>a+b, 0);
-    return MAX_PER_PLAYER - used;
+    return MAX_PER_PLAYER - (remainCounts[player] || 0);
   }
 
-  function canAdd(player, cardId) {
-    if (playerRemain(player) <= 0) return false;
-    if (globalUsed(cardId) >= GLOBAL_MAX[cardId]) return false;
-    return true;
-  }
-
-  function addCard(player, cardId) {
-    if (!canAdd(player, cardId)) {
+  function addCard(cardId) {
+    if (cardCounts[cardId] >= GLOBAL_MAX[cardId]) {
       if (navigator.vibrate) navigator.vibrate(10);
       return;
     }
-    counts[player][cardId]++;
-    history.push({ player, cardId });
+    cardCounts[cardId]++;
+    history.push({ type: 'card', cardId });
     updateUI();
     save();
   }
+
+  window.quickAdd = function(player, n) {
+    const remain = playerRemain(player);
+    if (remain < n) {
+      if (navigator.vibrate) navigator.vibrate(15);
+      return;
+    }
+    remainCounts[player] += n;
+    history.push({ type: 'quick', player, count: n });
+    updateUI();
+    save();
+  };
 
   function undo() {
     if (!history.length) return;
     const last = history.pop();
-    if (counts[last.player][last.cardId] > 0) {
-      counts[last.player][last.cardId]--;
+    if (last.type === 'card') {
+      if (cardCounts[last.cardId] > 0) {
+        cardCounts[last.cardId]--;
+      }
+    } else if (last.type === 'quick') {
+      remainCounts[last.player] = Math.max(0, remainCounts[last.player] - last.count);
     }
-    updateUI();
-    save();
-  }
-
-  function selectPlayer(p) {
-    selected = p;
     updateUI();
     save();
   }
@@ -294,16 +378,11 @@
     document.getElementById('remainOpposite').textContent = playerRemain('opposite');
     document.getElementById('remainDown').textContent = playerRemain('down');
 
-    const idMap = { up:'selUp', opposite:'selOpposite', down:'selDown' };
-    PLAYERS.forEach(p => {
-      document.getElementById(idMap[p]).classList.toggle('active', p === selected);
-    });
-
     document.querySelectorAll('.card-cell').forEach(el => {
       const cid = el.getAttribute('data-id');
-      const cnt = counts[selected][cid] || 0;
+      const cnt = cardCounts[cid] || 0;
       el.querySelector('.card-count').textContent = `${cnt}/${GLOBAL_MAX[cid]}`;
-      el.classList.toggle('full', !canAdd(selected, cid));
+      el.classList.toggle('full', cnt >= GLOBAL_MAX[cid]);
     });
   }
 
@@ -319,43 +398,36 @@
         <div class="card-sym">${c.sym}</div>
         <div class="card-count">0/${c.total}</div>
       `;
-      div.addEventListener('click', () => addCard(selected, c.id));
+      div.addEventListener('click', () => addCard(c.id));
       grid.appendChild(div);
     });
   }
 
   function save() {
     try {
-      localStorage.setItem('gouji_pure_v8', JSON.stringify({
-        counts, selected, history: history.slice(-200)
+      localStorage.setItem('gouji_v15', JSON.stringify({
+        cardCounts, remainCounts, history: history.slice(-200)
       }));
     } catch(e) {}
   }
 
   function load() {
     try {
-      const raw = localStorage.getItem('gouji_pure_v8');
+      const raw = localStorage.getItem('gouji_v15');
       if (raw) {
         const data = JSON.parse(raw);
-        if (data.counts) {
-          PLAYERS.forEach(p => {
-            if (data.counts[p]) {
-              CARD_DEFS.forEach(c => {
-                let v = data.counts[p][c.id] || 0;
-                counts[p][c.id] = Math.max(0, Math.min(v, GLOBAL_MAX[c.id]));
-              });
-            }
+        if (data.cardCounts) {
+          CARD_DEFS.forEach(c => {
+            let v = data.cardCounts[c.id] || 0;
+            cardCounts[c.id] = Math.max(0, Math.min(v, GLOBAL_MAX[c.id]));
           });
         }
-        if (data.selected && PLAYERS.includes(data.selected)) selected = data.selected;
-        if (data.history) history = data.history.filter(h => h && h.player);
+        if (data.remainCounts) remainCounts = { ...remainCounts, ...data.remainCounts };
+        if (data.history) history = data.history.filter(h => h && h.type);
       }
     } catch(e) {}
   }
 
-  document.getElementById('selUp').addEventListener('click', ()=>selectPlayer('up'));
-  document.getElementById('selOpposite').addEventListener('click', ()=>selectPlayer('opposite'));
-  document.getElementById('selDown').addEventListener('click', ()=>selectPlayer('down'));
   document.getElementById('undoBtn').addEventListener('click', undo);
   document.getElementById('resetBtn').addEventListener('click', resetAll);
 
