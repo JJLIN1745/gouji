@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>够级记牌器</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      font-family: system-ui, 'PingFang SC', 'Noto Sans', Roboto, sans-serif;
+    }
+    body {
+      background: linear-gradient(155deg, #1a2f1f 0%, #1e3c2f 50%, #0f1f15 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 10px;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(250, 245, 235, 0.96);
+      border-radius: 36px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+      padding: 18px 14px 22px;
+      border: 1px solid #c9aa64;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      background: #2d5a27;
+      border-radius: 50px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      box-shadow: inset 0 -4px 0 #1a3616;
+      border: 1px solid #e4b95b;
+      color: #fbe9b1;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: 3px;
+    }
+    .remain-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .remain-card {
+      flex: 1;
+      background: radial-gradient(circle at 25% 30%, #fff9ee, #e9d4ae);
+      border-radius: 22px;
+      padding: 14px 6px 10px;
+      text-align: center;
+      border: 2px solid #d3a84c;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .remain-card.active {
+      border-color: #e63946;
+      box-shadow: 0 0 18px #e6394680;
+      background: radial-gradient(circle at 25% 30%, #fff2f0, #f5d5c8);
+    }
+    .remain-card .name {
+      font-weight: 800;
+      font-size: 1rem;
+      color: #3d2b10;
+    }
+    .remain-card .num {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #1f401a;
+      line-height: 1.1;
+    }
+    .remain-card .label {
+      font-size: 0.7rem;
+      color: #6e5a3a;
+    }
+    .section-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #3b5a2b;
+      border-bottom: 2px solid #c7a86b60;
+      padding-bottom: 6px;
+      margin: 12px 0 8px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 8px 0;
+    }
+    .card-cell {
+      background: radial-gradient(circle at 25% 30%, #fffdf5, #ecd9b4);
+      border-radius: 16px;
+      padding: 8px 2px 6px;
+      text-align: center;
+      border: 1px solid #d3a84c;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+      cursor: pointer;
+      transition: 0.06s;
+    }
+    .card-cell:active {
+      transform: scale(0.9);
+    }
+    .card-cell.full {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .card-rank {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #2c4720;
+      line-height: 1;
+    }
+    .card-sym {
+      font-size: 0.7rem;
+      color: #8b6d3d;
+      margin: 2px 0;
+    }
+    .card-count {
+      background: #2f4d2b;
+      color: #f7e9b0;
+      border-radius: 14px;
+      padding: 3px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-block;
+    }
+    .footer-btns {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .btn {
+      border: none;
+      border-radius: 28px;
+      padding: 12px 22px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #5a4326;
+      background: linear-gradient(180deg, #f8e7c0, #caa461);
+      color: #2d2a1a;
+      transition: 0.06s;
+    }
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #3b2a14;
+    }
+    .btn.green {
+      background: linear-gradient(180deg, #6ea861, #2c5526);
+      color: #f1ffe5;
+      box-shadow: 0 4px 0 #183613;
+    }
+    .note {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #8b7a5a;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">🃏 够级记牌器</div>
+
+  <div class="remain-row">
+    <div class="remain-card active" id="selUp">
+      <div class="name">⬆️ 上家</div>
+      <div class="num" id="remainUp">52</div>
+      <div class="label">剩余牌数</div>
+    </div>
+    <div class="remain-card" id="selOpposite">
+      <div class="name">↔️ 对家</div>
+      <div class="num" id="remainOpposite">52</div>
+      <div class="label">剩余牌数</div>
+    </div>
+    <div class="remain-card" id="selDown">
+      <div class="name">⬇️ 下家</div>
+      <div class="num" id="remainDown">52</div>
+      <div class="label">剩余牌数</div>
+    </div>
+  </div>
+
+  <div class="section-title">🃏 点击牌面为选中玩家出牌 +1</div>
+  <div class="card-grid" id="cardGrid"></div>
+
+  <div class="footer-btns">
+    <button class="btn" id="undoBtn">↩️ 撤回</button>
+    <button class="btn green" id="resetBtn">🔄 重置</button>
+  </div>
+  <div class="note">
+    📐 先点人(上家/对家/下家) → 再点牌面 | 每人52张 | Ctrl+Z撤回
+  </div>
+</div>
+
+<script>
+(function() {
+  const CARD_DEFS = [
+    { rank:'3', id:'3', total:6, sym:'♠♥♦♣' },
+    { rank:'4', id:'4', total:24, sym:'♠♥♦♣' },
+    { rank:'5', id:'5', total:24, sym:'♠♥♦♣' },
+    { rank:'6', id:'6', total:24, sym:'♠♥♦♣' },
+    { rank:'7', id:'7', total:24, sym:'♠♥♦♣' },
+    { rank:'8', id:'8', total:24, sym:'♠♥♦♣' },
+    { rank:'9', id:'9', total:24, sym:'♠♥♦♣' },
+    { rank:'10', id:'10', total:24, sym:'♠♥♦♣' },
+    { rank:'J', id:'J', total:24, sym:'♠♥♦♣' },
+    { rank:'Q', id:'Q', total:24, sym:'♠♥♦♣' },
+    { rank:'K', id:'K', total:24, sym:'♠♥♦♣' },
+    { rank:'A', id:'A', total:24, sym:'♠♥♦♣' },
+    { rank:'2', id:'2', total:24, sym:'♠♥♦♣' },
+    { rank:'🃏', id:'SJ', total:6, sym:'小王' },
+    { rank:'👑', id:'BJ', total:6, sym:'大王' },
+    { rank:'🦅', id:'EAGLE', total:6, sym:'鹰牌' }
+  ];
+
+  const MAX_PER_PLAYER = 52;
+  const PLAYERS = ['up', 'opposite', 'down'];
+  const GLOBAL_MAX = {};
+  CARD_DEFS.forEach(c => GLOBAL_MAX[c.id] = c.total);
+
+  let counts = { up:{}, opposite:{}, down:{} };
+  let selected = 'up';
+  let history = [];
+
+  function init() {
+    PLAYERS.forEach(p => {
+      counts[p] = {};
+      CARD_DEFS.forEach(c => counts[p][c.id] = 0);
+    });
+    history = [];
+    selected = 'up';
+  }
+
+  function globalUsed(cardId) {
+    return PLAYERS.reduce((sum, p) => sum + (counts[p][cardId] || 0), 0);
+  }
+
+  function playerRemain(player) {
+    const used = Object.values(counts[player]).reduce((a,b)=>a+b, 0);
+    return MAX_PER_PLAYER - used;
+  }
+
+  function canAdd(player, cardId) {
+    if (playerRemain(player) <= 0) return false;
+    if (globalUsed(cardId) >= GLOBAL_MAX[cardId]) return false;
+    return true;
+  }
+
+  function addCard(player, cardId) {
+    if (!canAdd(player, cardId)) {
+      if (navigator.vibrate) navigator.vibrate(10);
+      return;
+    }
+    counts[player][cardId]++;
+    history.push({ player, cardId });
+    updateUI();
+    save();
+  }
+
+  function undo() {
+    if (!history.length) return;
+    const last = history.pop();
+    if (counts[last.player][last.cardId] > 0) {
+      counts[last.player][last.cardId]--;
+    }
+    updateUI();
+    save();
+  }
+
+  function selectPlayer(p) {
+    selected = p;
+    updateUI();
+    save();
+  }
+
+  function resetAll() {
+    if (confirm('确定重置所有记录？')) {
+      init();
+      updateUI();
+      save();
+    }
+  }
+
+  function updateUI() {
+    document.getElementById('remainUp').textContent = playerRemain('up');
+    document.getElementById('remainOpposite').textContent = playerRemain('opposite');
+    document.getElementById('remainDown').textContent = playerRemain('down');
+
+    const idMap = { up:'selUp', opposite:'selOpposite', down:'selDown' };
+    PLAYERS.forEach(p => {
+      document.getElementById(idMap[p]).classList.toggle('active', p === selected);
+    });
+
+    document.querySelectorAll('.card-cell').forEach(el => {
+      const cid = el.getAttribute('data-id');
+      const cnt = counts[selected][cid] || 0;
+      el.querySelector('.card-count').textContent = `${cnt}/${GLOBAL_MAX[cid]}`;
+      el.classList.toggle('full', !canAdd(selected, cid));
+    });
+  }
+
+  function buildGrid() {
+    const grid = document.getElementById('cardGrid');
+    grid.innerHTML = '';
+    CARD_DEFS.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'card-cell';
+      div.setAttribute('data-id', c.id);
+      div.innerHTML = `
+        <div class="card-rank">${c.rank}</div>
+        <div class="card-sym">${c.sym}</div>
+        <div class="card-count">0/${c.total}</div>
+      `;
+      div.addEventListener('click', () => addCard(selected, c.id));
+      grid.appendChild(div);
+    });
+  }
+
+  function save() {
+    try {
+      localStorage.setItem('gouji_pure_v8', JSON.stringify({
+        counts, selected, history: history.slice(-200)
+      }));
+    } catch(e) {}
+  }
+
+  function load() {
+    try {
+      const raw = localStorage.getItem('gouji_pure_v8');
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (data.counts) {
+          PLAYERS.forEach(p => {
+            if (data.counts[p]) {
+              CARD_DEFS.forEach(c => {
+                let v = data.counts[p][c.id] || 0;
+                counts[p][c.id] = Math.max(0, Math.min(v, GLOBAL_MAX[c.id]));
+              });
+            }
+          });
+        }
+        if (data.selected && PLAYERS.includes(data.selected)) selected = data.selected;
+        if (data.history) history = data.history.filter(h => h && h.player);
+      }
+    } catch(e) {}
+  }
+
+  document.getElementById('selUp').addEventListener('click', ()=>selectPlayer('up'));
+  document.getElementById('selOpposite').addEventListener('click', ()=>selectPlayer('opposite'));
+  document.getElementById('selDown').addEventListener('click', ()=>selectPlayer('down'));
+  document.getElementById('undoBtn').addEventListener('click', undo);
+  document.getElementById('resetBtn').addEventListener('click', resetAll);
+
+  window.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+      e.preventDefault();
+      undo();
+    }
+  });
+
+  init();
+  buildGrid();
+  load();
+  updateUI();
+  window.addEventListener('beforeunload', save);
+})();
+</script>
+</body>
+</html>
